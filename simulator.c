@@ -24,7 +24,8 @@ int main(int argc, char* argv[])
         srand(time(NULL));
         int numSimulations = 0, i = 0, highestScore = 0,
                 bestApplicant =-1, currApplicant = 0, currScore = 0,
-                numBestPicks = 0, simulationCount = 0;
+                numBestPicks = 0, simulationCount = 0,
+                numWorstPicks = 0, worstScore = 0;
         int *applicantScores;
         printf("Secretary Problem Simulator\n");
 
@@ -60,6 +61,7 @@ int main(int argc, char* argv[])
                 currScore = 0;
                 highestScore = 0;
                 bestApplicant = -1;
+                worstScore = MAX_SCORE + 1;
                 /*Give each applicant a random score*/
                 for(i = 0; i < NUM_APPLICANTS; i++)
                 {
@@ -94,17 +96,31 @@ int main(int argc, char* argv[])
                                 bestApplicant = i;
                                 highestScore = applicantScores[i];
                         }
+                        if(applicantScores[i] < worstScore)
+                        {
+                                worstScore = applicantScores[i];
+                        }
                 }
 
                 if(applicantScores[currApplicant] == highestScore)
                 {
                         numBestPicks++;
                 }
+
+                if(applicantScores[currApplicant] == worstScore)
+                {
+                        numWorstPicks++;
+                }
         }
 
         percent = 100*((double)numBestPicks / numSimulations);
         printf("Num best picks %d/%d %.2lf%%\n",
                numBestPicks,
+               (int)numSimulations,
+               percent);
+        percent = 100*((double)numWorstPicks / numSimulations);
+        printf("Num worst picks %d/%d %.2lf%%\n",
+               numWorstPicks,
                (int)numSimulations,
                percent);
 
